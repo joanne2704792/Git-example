@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <style>
+        p {
+            color: coral;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            background-color: aquamarine;
+            align-items: center;
+            align-content: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif; /* 設定字體 */
+        }
+
+        /* 驗證碼樣式 */
+        #captchaDisplay {
+            font-weight: bold;
+            font-size: 28px; /* 增大字體大小 */
+            margin-bottom: 10px;
+            padding: 10px; /* 添加內邊距 */
+            border: 2px solid coral; /* 添加邊框 */
+            border-radius: 8px; /* 圓角 */
+            background-color: rgba(255, 255, 255, 0.8); /* 背景顏色 */
+            text-align: center; /* 置中 */
+            width: 100px; /* 設定寬度 */
+            letter-spacing: 2px; /* 字母間距 */
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* 添加陰影 */
+        }
+
+        /* 其他輸入框樣式 */
+        input[type="text"], input[type="password"] {
+            width: 200px; /* 輸入框寬度 */
+            padding: 8px; /* 內邊距 */
+            margin-bottom: 10px; /* 輸入框間距 */
+            border: 1px solid coral; /* 邊框 */
+            border-radius: 4px; /* 圓角 */
+        }
+
+        input[type="submit"] {
+            background-color: coral; /* 按鈕背景色 */
+            color: white; /* 按鈕文字顏色 */
+            border: none; /* 取消邊框 */
+            border-radius: 4px; /* 圓角 */
+            padding: 10px 15px; /* 內邊距 */
+            cursor: pointer; /* 手型光標 */
+            transition: background-color 0.3s; /* 動畫效果 */
+        }
+
+        input[type="submit"]:hover {
+            background-color: darkorange; /* 懸停變色 */
+        }
+    </style>
+    <script>
+        let captchaCode = '';
+
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            captchaCode = '';
+            for (let i = 0; i < 6; i++) {
+                captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captchaDisplay').innerText = captchaCode;
+        }
+
+        function validateForm() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const captchaInput = document.getElementById('captchaInput').value;
+
+            const correctUsername = 'admin';
+            const correctPassword = '1234';
+
+            // 檢查使用者輸入
+            if (username === correctUsername && password === correctPassword && captchaInput === captchaCode) {
+                alert("登入成功！歡迎，" + username + "。");
+                window.location.href = 'success.html'; // 登入成功後跳轉到 success.html
+            } else {
+                alert("登入失敗，帳號或密碼或驗證碼錯誤。");
+            }
+
+            return false; // 阻止表單提交
+        }
+
+        // 當頁面加載時生成驗證碼
+        window.onload = generateCaptcha;
+    </script>
+</head>
+<body>
+    <h1>Login</h1>
+    <form onsubmit="return validateForm();">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" placeholder="請輸入帳號" required><br>
+        
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" placeholder="請輸入密碼" required><br>
+        
+        <label for="captcha">驗證碼:</label><br>
+        <div id="captchaDisplay"></div>
+        <input type="text" id="captchaInput" name="captchaInput" placeholder="請輸入驗證碼" required><br>
+        
+        <input type="submit" value="登入">
+    </form>
+</body>
+</html>
+
