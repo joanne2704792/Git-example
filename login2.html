@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <style>
+        p {
+            color: coral;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            background-color: aquamarine;
+            align-items: center;
+            align-content: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 跑馬燈動畫樣式 */
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            height: 50px; /* 設定跑馬燈的高度 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px; /* 加入下邊距以避免與標題重疊 */
+            line-height: 50px; /* 讓內容垂直居中 */
+        }
+
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%; /* 讓內容從右邊開始進入 */
+            animation: marquee 10s linear infinite; /* 設置動畫 */
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translate(0, 0); /* 開始位置 */
+            }
+            100% {
+                transform: translate(-100%, 0); /* 結束位置 */
+            }
+        }
+
+        /* 驗證碼樣式 */
+        #captchaDisplay {
+            font-weight: bold;
+            font-size: 28px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid coral;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            width: 140px;
+            letter-spacing: 2px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 驗證碼容器：讓驗證碼與按鈕水平排列 */
+        .captcha-container {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* 刷新驗證碼按鈕樣式 */
+        .refresh-button {
+            margin-left: 10px;
+            padding: 10px;
+            background-color: coral;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .refresh-button:hover {
+            background-color: darkorange;
+        }
+
+        /* 其他輸入框樣式 */
+        input[type="text"], input[type="password"] {
+            width: 200px;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid coral;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: coral;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: darkorange;
+        }
+
+        /* 密碼框容器，讓眼睛圖示與密碼框對齊 */
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 眼睛圖示樣式 */
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        /* 眼睛圖示的大小 */
+        .toggle-password img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+    <script>
+        let captchaCode = '';
+
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            captchaCode = '';
+            for (let i = 0; i < 6; i++) {
+                captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captchaDisplay').innerText = captchaCode;
+        }
+
+        function validateForm() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const captchaInput = document.getElementById('captchaInput').value;
+
+            const correctUsername = 'admin';
+            const correctPassword = '1234';
+
+            // 檢查使用者輸入
+            if (username === correctUsername && password === correctPassword && captchaInput === captchaCode) {
+                alert("登入成功！歡迎" + username + "。");
+                window.location.href = 'success.html'; // 登入成功後跳轉到 success.html
+            } else {
+                alert("登入失敗，帳號或密碼或驗證碼錯誤。");
+                generateCaptcha();
+            }
+
+            return false; // 阻止表單提交
+        }
+
+        // 切換密碼顯示/隱藏
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text'; // 顯示密碼
+                toggleIcon.src = 'https://img.icons8.com/ios-filled/50/000000/invisible.png'; // 替換為不可見圖示
+            } else {
+                passwordField.type = 'password'; // 隱藏密碼
+                toggleIcon.src = 'https://img.icons8.com/ios-filled/50/000000/visible.png'; // 替換為可見圖示
+            }
+        }
+
+        // 當頁面加載時生成驗證碼
+        window.onload = generateCaptcha;
+    </script>
+</head>
+<body>
+    <!-- 跑馬燈區域，放在Login上方 -->
+    <div class="marquee">
+        <div class="marquee-content">我的登入介面!  !  !</div>
+    </div>
+
+    <h1>Login</h1>
+
+    <form onsubmit="return validateForm();">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" placeholder="請輸入帳號" required><br>
+        
+        <label for="password">Password:</label><br>
+        <div class="password-container">
+            <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
+            <!-- 眼睛圖示按鈕，點擊切換密碼顯示/隱藏 -->
+            <span class="toggle-password" onclick="togglePassword()">
+                <img id="toggleIcon" src="https://img.icons8.com/ios-filled/50/000000/visible.png" alt="Toggle Password Visibility">
+            </span>
+        </div><br>
+
+        <label for="captcha">驗證碼:</label><br>
+        <div class="captcha-container">
+            <div id="captchaDisplay"></div>
+            <button type="button" class="refresh-button" onclick="generateCaptcha()">刷新驗證碼</button>
+        </div><br>
+        
+        <input type="text" id="captchaInput" name="captchaInput" placeholder="請輸入驗證碼" required><br>
+        
+        <input type="submit" value="登入">
+    </form>
+</body>
+</html>
